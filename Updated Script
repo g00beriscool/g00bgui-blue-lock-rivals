@@ -1,171 +1,190 @@
--- Blue Lock Rivals Style GUI - Full Version by Nova
-
 pcall(function()
-    local Players = game:GetService("Players")
-    local UserInputService = game:GetService("UserInputService")
-    local LocalPlayer = Players.LocalPlayer
-    local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+    local function runScript(url)
+        loadstring(game:HttpGet(url))()
+    end
 
-    local ScreenGui = Instance.new("ScreenGui", PlayerGui)
-    ScreenGui.Name = "BlueLockRivalsNovaGUI"
+    local ScreenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+    ScreenGui.Name = "BlueLockGUI"
     ScreenGui.ResetOnSpawn = false
 
-    local Frame = Instance.new("Frame", ScreenGui)
-    Frame.Size = UDim2.new(0, 400, 0, 320)
-    Frame.Position = UDim2.new(0.5, -200, 0.5, -160)
-    Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-    Frame.Active = true
-    Frame.Draggable = true
-    Instance.new("UICorner", Frame).CornerRadius = UDim.new(0, 12)
-    Instance.new("UIStroke", Frame).Color = Color3.fromRGB(0, 140, 255)
+    local Main = Instance.new("Frame", ScreenGui)
+    Main.Size = UDim2.new(0, 420, 0, 320)
+    Main.Position = UDim2.new(0.5, -210, 0.5, -160)
+    Main.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    Main.BorderSizePixel = 0
+    Main.AnchorPoint = Vector2.new(0.5, 0.5)
+    Main.Active = true
+    Main.Draggable = true
+    Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 10)
 
-    local Title = Instance.new("TextLabel", Frame)
-    Title.Text = "Blue Lock Rivals Style GUI - Nova"
-    Title.Size = UDim2.new(1, 0, 0, 35)
+    local Title = Instance.new("TextLabel", Main)
+    Title.Size = UDim2.new(1, 0, 0, 40)
     Title.BackgroundTransparency = 1
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.GothamBold
+    Title.Text = "Blue Lock Rivals UI - by Nova"
+    Title.TextColor3 = Color3.fromRGB(100, 200, 255)
     Title.TextScaled = true
+    Title.Font = Enum.Font.GothamBold
 
-    local tabButtonsFrame = Instance.new("Frame", Frame)
-    tabButtonsFrame.Size = UDim2.new(1, 0, 0, 30)
-    tabButtonsFrame.Position = UDim2.new(0, 0, 0, 35)
-    tabButtonsFrame.BackgroundTransparency = 1
+    local TabHolder = Instance.new("Frame", Main)
+    TabHolder.Size = UDim2.new(0, 110, 1, -40)
+    TabHolder.Position = UDim2.new(0, 0, 0, 40)
+    TabHolder.BackgroundColor3 = Color3.fromRGB(18, 18, 28)
+    Instance.new("UICorner", TabHolder).CornerRadius = UDim.new(0, 8)
 
-    local function createTab(name)
-        local tab = Instance.new("ScrollingFrame", Frame)
-        tab.Size = UDim2.new(1, 0, 1, -75)
-        tab.Position = UDim2.new(0, 0, 0, 65)
-        tab.CanvasSize = UDim2.new(0, 0, 0, 0)
-        tab.ScrollBarThickness = 4
-        tab.BackgroundTransparency = 1
-        local layout = Instance.new("UIListLayout", tab)
-        layout.Padding = UDim.new(0, 6)
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
-        layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            tab.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 20)
-        end)
-        return tab
-    end
+    local ContentHolder = Instance.new("Frame", Main)
+    ContentHolder.Size = UDim2.new(1, -120, 1, -50)
+    ContentHolder.Position = UDim2.new(0, 120, 0, 45)
+    ContentHolder.BackgroundTransparency = 1
 
-    local canonTab = createTab()
-    local customTab = createTab()
-    local movesTab = createTab()
-
-    canonTab.Visible = true
-    customTab.Visible = false
-    movesTab.Visible = false
-
-    local function createTabButton(name, targetTab)
-        local btn = Instance.new("TextButton", tabButtonsFrame)
-        btn.Size = UDim2.new(0.33, 0, 1, 0)
+    local function makeTab(name, callback)
+        local btn = Instance.new("TextButton", TabHolder)
+        btn.Size = UDim2.new(1, -10, 0, 30)
+        btn.Position = UDim2.new(0, 5, 0, #TabHolder:GetChildren() * 35 - 35)
         btn.Text = name
-        btn.TextScaled = true
-        btn.Font = Enum.Font.GothamBold
-        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.TextColor3 = Color3.fromRGB(200, 200, 255)
+        btn.BackgroundColor3 = Color3.fromRGB(30, 30, 50)
+        btn.Font = Enum.Font.Gotham
+        btn.TextSize = 14
+        btn.AutoButtonColor = true
         Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
-        btn.MouseButton1Click:Connect(function()
-            canonTab.Visible = targetTab == "canon"
-            customTab.Visible = targetTab == "custom"
-            movesTab.Visible = targetTab == "moves"
-        end)
-    end
-
-    createTabButton("Canon Styles", "canon")
-    createTabButton("Custom Styles", "custom")
-    createTabButton("Custom Moves", "moves")
-
-    local function createButton(text, callback, parent)
-        local btn = Instance.new("TextButton", parent)
-        btn.Size = UDim2.new(1, -20, 0, 40)
-        btn.Position = UDim2.new(0, 10, 0, 0)
-        btn.Text = text
-        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.Font = Enum.Font.GothamMedium
-        btn.TextScaled = true
-        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 8)
         btn.MouseButton1Click:Connect(callback)
     end
 
-    local canonStyles = {"Sae", "King", "Don Lorenzo", "Isagi", "Kaiser", "Rin", "Aiku", "NEL Isagi", "Shidou", "Nagi", "Reo"}
-    for _, name in ipairs(canonStyles) do
-        createButton("Style: " .. name, function()
-            LocalPlayer.PlayerStats.Style.Value = name
-        end, canonTab)
-    end
-
-    local function applyCustomStyle(name)
-        local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-        for _, v in pairs(char:GetChildren()) do
-            if v:IsA("Shirt") or v:IsA("Pants") or v:IsA("Accessory") then v:Destroy() end
+    local function switchContent(func)
+        for _, child in pairs(ContentHolder:GetChildren()) do
+            child:Destroy()
         end
-        local styles = {
-            ["Gojo Satoru"] = {shirt = "rbxassetid://11785535310", pants = "rbxassetid://11785537292"},
-            ["Sukuna"] = {shirt = "rbxassetid://123456789", pants = "rbxassetid://987654321"},
-            ["Naruto"] = {shirt = "rbxassetid://50621333", pants = "rbxassetid://50621375"},
-            ["Goku"] = {shirt = "rbxassetid://9738192733", pants = "rbxassetid://9738193281"},
-            ["Saitama"] = {shirt = "rbxassetid://1343544976", pants = "rbxassetid://1343544980"},
-        }
-        local data = styles[name]
-        if not data then return end
-        if data.shirt then Instance.new("Shirt", char).ShirtTemplate = data.shirt end
-        if data.pants then Instance.new("Pants", char).PantsTemplate = data.pants end
+        func()
     end
 
-    local customStyles = {"Gojo Satoru", "Sukuna", "Naruto", "Goku", "Saitama"}
-    for _, name in ipairs(customStyles) do
-        createButton("Style: " .. name, function()
-            LocalPlayer.PlayerStats.Style.Value = name
-            applyCustomStyle(name)
-        end, customTab)
-    end
+    -- Styles Tab
+    makeTab("Styles", function()
+        switchContent(function()
+            local styles = {"NEL Isagi", "Rin", "Sae", "Don Lorenzo", "Gojo", "Ego Jinpachi"}
+            for i, style in ipairs(styles) do
+                local b = Instance.new("TextButton", ContentHolder)
+                b.Size = UDim2.new(1, -20, 0, 30)
+                b.Position = UDim2.new(0, 10, 0, (i - 1) * 35)
+                b.Text = "Set Style: " .. style
+                b.TextColor3 = Color3.fromRGB(255, 255, 255)
+                b.Font = Enum.Font.GothamBold
+                b.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
+                b.TextSize = 14
+                Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
 
-    createButton("Surprise Me", function()
-        local all = {}
-        for _, v in ipairs(canonStyles) do table.insert(all, v) end
-        for _, v in ipairs(customStyles) do table.insert(all, v) end
-        local pick = all[math.random(1, #all)]
-        LocalPlayer.PlayerStats.Style.Value = pick
-        if table.find(customStyles, pick) then applyCustomStyle(pick) end
-    end, customTab)
-
-    createButton("Custom Move: Hollow Purple", function()
-        local remotes = LocalPlayer:FindFirstChild("Remotes")
-        if remotes and remotes:FindFirstChild("Steal") then
-            remotes.Steal:FireServer()
-        end
-        local p = Instance.new("ParticleEmitter", LocalPlayer.Character.Head)
-        p.Texture = "rbxassetid://243660364"
-        p.Speed = NumberRange.new(10)
-        p.Lifetime = NumberRange.new(1)
-        p.Rate = 100
-        game:GetService("Debris"):AddItem(p, 1.5)
-    end, movesTab)
-
-    createButton("Custom Move: Rasengan", function()
-        local char = LocalPlayer.Character
-        local ball = Instance.new("Part", char)
-        ball.Size = Vector3.new(1.5,1.5,1.5)
-        ball.Shape = Enum.PartType.Ball
-        ball.Material = Enum.Material.Neon
-        ball.BrickColor = BrickColor.new("Electric blue")
-        ball.Position = char.HumanoidRootPart.Position + Vector3.new(0,2,2)
-        ball.Anchored = false
-        ball.CanCollide = false
-        local bv = Instance.new("BodyVelocity", ball)
-        bv.Velocity = char.HumanoidRootPart.CFrame.LookVector * 150
-        bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
-        game:GetService("Debris"):AddItem(ball, 2)
-    end, movesTab)
-
-    createButton("Custom Move: One Punch", function()
-        for _, v in pairs(workspace:GetDescendants()) do
-            if v:IsA("Humanoid") and v ~= LocalPlayer.Character:FindFirstChild("Humanoid") then
-                v.Health = 0
+                if style == "Ego Jinpachi" then
+                    b.MouseButton1Click:Connect(function()
+                        runScript("https://your-url.com/egojinpachi.lua") -- Replace with actual script
+                    end)
+                else
+                    b.MouseButton1Click:Connect(function()
+                        game.Players.LocalPlayer.PlayerStats.Style.Value = style
+                    end)
+                end
             end
-        end
-    end, movesTab)
+        end)
+    end)
+
+    -- Speed Hack Tab
+    makeTab("Speed", function()
+        switchContent(function()
+            local b = Instance.new("TextButton", ContentHolder)
+            b.Size = UDim2.new(1, -20, 0, 30)
+            b.Position = UDim2.new(0, 10, 0, 0)
+            b.Text = "Activate TP Walk Speed (0.67)"
+            b.TextColor3 = Color3.fromRGB(255, 255, 255)
+            b.Font = Enum.Font.GothamBold
+            b.BackgroundColor3 = Color3.fromRGB(40, 40, 70)
+            b.TextSize = 14
+            Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+            b.MouseButton1Click:Connect(function()
+                local tspeed = 0.67
+                local hb = game:GetService("RunService").Heartbeat
+                local lplr = game:GetService("Players").LocalPlayer
+                local chr = lplr.Character or lplr.CharacterAdded:Wait()
+                local hum = chr:FindFirstChildWhichIsA("Humanoid")
+                spawn(function()
+                    while chr and hum and hum.Parent do
+                        hb:Wait()
+                        if hum.MoveDirection.Magnitude > 0 then
+                            chr:TranslateBy(hum.MoveDirection * tspeed)
+                        end
+                    end
+                end)
+            end)
+        end)
+    end)
+
+    -- Hollow Purple Tab
+    makeTab("Hollow Purple", function()
+        switchContent(function()
+            local b = Instance.new("TextButton", ContentHolder)
+            b.Size = UDim2.new(1, -20, 0, 30)
+            b.Position = UDim2.new(0, 10, 0, 0)
+            b.Text = "Use Hollow Purple (Get Ball)"
+            b.TextColor3 = Color3.fromRGB(255, 255, 255)
+            b.Font = Enum.Font.GothamBold
+            b.BackgroundColor3 = Color3.fromRGB(80, 30, 100)
+            b.TextSize = 14
+            Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+            b.MouseButton1Click:Connect(function()
+                local args = {[1] = game.Players.LocalPlayer.Character}
+                game:GetService("ReplicatedStorage"):WaitForChild("BallSystem"):WaitForChild("BallEvents"):WaitForChild("GetBall"):FireServer(unpack(args))
+            end)
+        end)
+    end)
+
+    -- Utility Tab
+    makeTab("Utility", function()
+        switchContent(function()
+            local y = 0
+
+            local function makeButton(txt, callback)
+                local b = Instance.new("TextButton", ContentHolder)
+                b.Size = UDim2.new(1, -20, 0, 30)
+                b.Position = UDim2.new(0, 10, 0, y)
+                y = y + 40
+                b.Text = txt
+                b.TextColor3 = Color3.fromRGB(255, 255, 255)
+                b.Font = Enum.Font.GothamBold
+                b.BackgroundColor3 = Color3.fromRGB(60, 60, 100)
+                b.TextSize = 14
+                Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+                b.MouseButton1Click:Connect(callback)
+            end
+
+            makeButton("Equip Angel Wings", function()
+                cloneref(game:GetService("ReplicatedStorage")).Packages.Knit.Services.CustomizationService.RE.Customize:FireServer("Cosmetics", "Angel Wings")
+            end)
+
+            makeButton("Extend Ball (Goalkeeper)", function()
+                loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+            end)
+
+            makeButton("No Ability Cooldown", function()
+                local AbilityController = require(cloneref(game:GetService("ReplicatedStorage")).Controllers.AbilityController)
+                hookfunction(AbilityController.AbilityCooldown, function()
+                    return 0
+                end)
+            end)
+
+            makeButton("Toggle Ball Hitbox Size", function()
+                local ball = workspace:FindFirstChild("Ball")
+                if not ball then return end
+                local originalBallSize = ball.Size
+                local isBig = false
+
+                local function modifyHitbox(enable)
+                    if enable then
+                        ball.Size = originalBallSize * 4
+                    else
+                        ball.Size = originalBallSize
+                    end
+                end
+
+                isBig = not isBig
+                modifyHitbox(isBig)
+            end)
+        end)
+    end)
 end)
