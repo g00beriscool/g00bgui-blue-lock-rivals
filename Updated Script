@@ -74,7 +74,7 @@ pcall(function()
 
                 if style == "Ego Jinpachi" then
                     b.MouseButton1Click:Connect(function()
-                        runScript("https://your-url.com/egojinpachi.lua") -- Replace with actual script
+                        runScript("https://your-url.com/egojinpachi.lua") -- Replace with actual script URL
                     end)
                 else
                     b.MouseButton1Click:Connect(function()
@@ -85,7 +85,7 @@ pcall(function()
         end)
     end)
 
-    -- Speed Hack Tab
+    -- Speed Tab
     makeTab("Speed", function()
         switchContent(function()
             local b = Instance.new("TextButton", ContentHolder)
@@ -138,7 +138,6 @@ pcall(function()
     makeTab("Utility", function()
         switchContent(function()
             local y = 0
-
             local function makeButton(txt, callback)
                 local b = Instance.new("TextButton", ContentHolder)
                 b.Size = UDim2.new(1, -20, 0, 30)
@@ -158,7 +157,7 @@ pcall(function()
             end)
 
             makeButton("Extend Ball (Goalkeeper)", function()
-                loadstring(game:HttpGet("https://pastebin.com/raw/T5m4nwPq"))()
+                runScript("https://pastebin.com/raw/T5m4nwPq")
             end)
 
             makeButton("No Ability Cooldown", function()
@@ -184,6 +183,50 @@ pcall(function()
 
                 isBig = not isBig
                 modifyHitbox(isBig)
+            end)
+        end)
+    end)
+
+    -- Flows Tab
+    makeTab("Flows", function()
+        switchContent(function()
+            local flows = {"Soul Harvester", "Awakened Genius", "Crow", "Monster ", "Emperor"}
+            for i, flow in ipairs(flows) do
+                local b = Instance.new("TextButton", ContentHolder)
+                b.Size = UDim2.new(1, -20, 0, 30)
+                b.Position = UDim2.new(0, 10, 0, (i - 1) * 35)
+                b.Text = "Activate Flow: " .. flow
+                b.TextColor3 = Color3.fromRGB(255, 255, 255)
+                b.Font = Enum.Font.GothamBold
+                b.BackgroundColor3 = Color3.fromRGB(50, 50, 90)
+                b.TextSize = 14
+                Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+
+                b.MouseButton1Click:Connect(function()
+                    game.Players.LocalPlayer.PlayerStats.Flow.Value = flow
+                end)
+            end
+        end)
+    end)
+
+    -- Rollback Tab
+    makeTab("Rollback", function()
+        switchContent(function()
+            local b = Instance.new("TextButton", ContentHolder)
+            b.Size = UDim2.new(1, -20, 0, 30)
+            b.Position = UDim2.new(0, 10, 0, 0)
+            b.Text = "Reset Style + Flow"
+            b.TextColor3 = Color3.fromRGB(255, 255, 255)
+            b.Font = Enum.Font.GothamBold
+            b.BackgroundColor3 = Color3.fromRGB(100, 40, 40)
+            b.TextSize = 14
+            Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6)
+            b.MouseButton1Click:Connect(function()
+                local stats = game.Players.LocalPlayer:FindFirstChild("PlayerStats")
+                if stats then
+                    stats.Style.Value = ""
+                    stats.Flow.Value = ""
+                end
             end)
         end)
     end)
