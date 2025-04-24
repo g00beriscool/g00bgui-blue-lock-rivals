@@ -2,7 +2,6 @@ pcall(function()
     local function runScript(url)
         loadstring(game:HttpGet(url))()
     end
-
     local ScreenGui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
     ScreenGui.Name = "BlueLockGUI"
     ScreenGui.ResetOnSpawn = false
